@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: process.env.WS_PORT });
+const wsPort = process.env.WS_PORT || 5001;
+const wss = new WebSocket.Server({ port: wsPort });
 
 wss.on('listening', (ws) => {
 	console.log('Listening on port ' + process.env.WS_PORT);
