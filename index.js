@@ -15,6 +15,12 @@ const usersRouter = require('./routes/users');
 const roomsRouter = require('./routes/rooms');
 const eventsRouter = require('./routes/events');
 
+app.get('/', (req, res) => {
+	res.status(200).json({
+		msg: 'Base path',
+	});
+});
+
 // Routes
 app.use('/users', usersRouter);
 app.use('/admin/rooms', roomsRouter);
