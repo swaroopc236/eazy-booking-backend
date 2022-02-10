@@ -35,6 +35,9 @@ const { OPEN } = require('ws');
 
 const wss = new WebSocket.Server({ server: app });
 
+// console.log('*******');
+// console.log(wss);
+
 app.on('upgrade', (request, socket, head) => {
 	wss.handleUpgrade(request, socket, head, (websocket) => {
 		wss.emit('connection', websocket, request);
@@ -53,3 +56,5 @@ wss.on('connection', (ws) => {
 		console.log('Client disconnected');
 	});
 });
+
+module.exports = wss;
