@@ -35,6 +35,12 @@ const { OPEN } = require('ws');
 
 const wss = new WebSocket.Server({ server: app });
 
+app.on('upgrade', (request, socket, head) => {
+	wss.handleUpgrade(request, socket, head, (websocket) => {
+		wss.emit('connection', websocket, request);
+	});
+});
+
 wss.on('connection', (ws) => {
 	console.log('Client connected....');
 	ws.send('Welcome Client!');
