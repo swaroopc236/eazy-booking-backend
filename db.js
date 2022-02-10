@@ -4,6 +4,9 @@ const { WebSocket } = require('ws');
 
 const pool = new Pool({
 	connectionString: process.env.POSTGRESQL_URI,
+	ssl: {
+		rejectUnauthorized: false,
+	},
 	idleTimeoutMillis: 30000,
 	connectionTimeoutMillis: 2000,
 });
