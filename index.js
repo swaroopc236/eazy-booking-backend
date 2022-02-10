@@ -30,23 +30,20 @@ app.listen(port, () => {
 	console.log('Server is running on port: ' + port);
 });
 
-// const WebSocket = require('ws');
-// const { OPEN } = require('ws');
+const WebSocket = require('ws');
+const { OPEN } = require('ws');
 
-// const wss = new WebSocket.Server({ port: 5050 });
+const wss = new WebSocket.Server({ server: app });
 
-// wss.on('connection', (ws) => {
-// 	console.log('Client connected');
-// 	ws.send('Welcome Client!');
-// 	ws.on('message', (data) => {
-// 		console.log(data.toString());
-// 		wss.clients.forEach((client) => {
-// 			if (client !== ws && client.readyState == OPEN) {
-// 				client.send(data);
-// 			}
-// 		});
-// 	});
-// 	ws.on('close', (ws) => {
-// 		console.log('Client disconnected');
-// 	});
-// });
+wss.on('connection', (ws) => {
+	console.log('Client connected....');
+	ws.send('Welcome Client!');
+	const welcomeMsg = {
+		msgType: 'WELCOME',
+		data: ['Welcome Client!'],
+	};
+	ws.send(JSON.stringify(welcomeMsg));
+	ws.on('close', (ws) => {
+		console.log('Client disconnected');
+	});
+});
