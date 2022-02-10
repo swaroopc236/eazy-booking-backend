@@ -33,10 +33,13 @@ app.listen(port, () => {
 const WebSocket = require('ws');
 const { OPEN } = require('ws');
 
-const wss = new WebSocket.Server({ server: app });
+const wss = new WebSocket.Server({
+	server: app,
+	host: 'eazy-booking-staging.herokuapp.com/',
+});
 
-// console.log('*******');
-// console.log(wss);
+console.log('*******');
+console.log(wss);
 
 app.on('upgrade', (request, socket, head) => {
 	wss.handleUpgrade(request, socket, head, (websocket) => {
