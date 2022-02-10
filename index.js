@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/users', usersRouter);
-app.use('/admin/rooms', roomsRouter);
+app.use('/rooms', roomsRouter);
 app.use('/events', eventsRouter);
 
 app.listen(port, () => {
