@@ -2,6 +2,10 @@ const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ port: process.env.WS_PORT });
 
+wss.on('listening', (ws) => {
+	console.log('Listening');
+});
+
 wss.on('connection', (ws) => {
 	console.log('Client connected');
 	const welcomeMsg = {
