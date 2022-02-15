@@ -1,14 +1,12 @@
 const { Pool } = require('pg');
-const { io } = require('./index');
-const { WebSocket } = require('ws');
 
 const pool = new Pool({
-	connectionString: process.env.POSTGRESQL_URI,
+	connectionString: process.env.POSTGRESQL_REMOTE_URI,
 	ssl: {
 		rejectUnauthorized: false,
 	},
 	idleTimeoutMillis: 30000,
-	connectionTimeoutMillis: 2000,
+	connectionTimeoutMillis: 10000,
 });
 
 function executeQuery(query, queryErrMsg, queryResult) {
@@ -53,11 +51,8 @@ function getLatestEvents() {
 		} else {
 			resultToBeSentViaWS.data = wsResult;
 		}
-		// wss.clients.forEach((client) => {
-		// 	if (client.readyState === WebSocket.OPEN) {
-		// 		client.send(JSON.stringify(resultToBeSentViaWS));
-		// 	}
-		// });
+
+		var io = require('./ws');
 
 		io.sockets.emit('LATEST_EVENTS', resultToBeSentViaWS);
 	});
@@ -80,11 +75,8 @@ function getLatestRooms() {
 		} else {
 			resultToBeSentViaWS.data = wsResult;
 		}
-		// wss.clients.forEach((client) => {
-		// 	if (client.readyState === WebSocket.OPEN) {
-		// 		client.send(JSON.stringify(resultToBeSentViaWS));
-		// 	}
-		// });
+
+		var io = require('./ws');
 
 		io.sockets.emit('LATEST_ROOMS', resultToBeSentViaWS);
 	});
