@@ -24,6 +24,33 @@ exports.getEvents = (req, res) => {
 	});
 };
 
+exports.getEventById = (req, res) => {
+	const eventId = req.params.eventId;
+
+	const query = {
+		name: 'get-event-by-id',
+		text: `select et."eventId", ut."userName", rt."roomName", et."eventDetails" from
+                events et
+                inner join users ut on et."userId" = ut."userId"
+                inner join rooms rt on et."roomId" = rt."roomId"
+				where et."eventId" = $1`,
+		values: [eventId],
+		rowMode: 'string',
+	};
+	const queryErrMsg = 'Could not get the event';
+
+	executeQuery(query, queryErrMsg, (err, result) => {
+		if (err) {
+			return res.status(500).json({
+				msg: err,
+			});
+		}
+		return res.status(200).json({
+			data: result,
+		});
+	});
+};
+
 exports.addEvent = (req, res) => {
 	const userId = req.body.userId;
 	const roomId = req.body.roomId;
