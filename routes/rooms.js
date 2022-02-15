@@ -5,6 +5,8 @@ const { requireAdmin } = require('../middleware/authMiddleware');
 
 router.get('/', roomController.getRooms);
 
+router.get('/:roomId', roomController.getRoomById);
+
 router.post('/', requireAuth, requireAdmin, roomController.addRoom);
 
 router.put('/:roomId', requireAuth, requireAdmin, roomController.updateRoom);

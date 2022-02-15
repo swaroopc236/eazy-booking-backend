@@ -21,6 +21,28 @@ exports.getRooms = (req, res) => {
 	});
 };
 
+exports.getRoomById = (req, res) => {
+	const roomId = req.params.roomId;
+	const query = {
+		name: 'get-room-by-id',
+		text: 'SELECT * FROM ROOMS where "roomId" = $1',
+		values: [roomId],
+		rowMode: 'string',
+	};
+	const queryErrMsg = 'Could not get the room';
+
+	executeQuery(query, queryErrMsg, (err, result) => {
+		if (err) {
+			return res.status(500).json({
+				msg: err,
+			});
+		}
+		return res.status(200).json({
+			data: result,
+		});
+	});
+};
+
 exports.addRoom = (req, res) => {
 	const roomName = req.body.roomName;
 	const roomDetails = req.body.roomDetails;
