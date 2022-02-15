@@ -1,37 +1,9 @@
 const { v4: uuidv4 } = require('uuid');
-const { executeQuery } = require('../db');
+const { executeQuery, getLatestEvents } = require('../db');
 // const wss = require('../ws');
 const wss = require('../index');
 const { WebSocket } = require('ws');
 // const requireAuth = require('../middleware/authMiddleware');
-
-getLatestEvents = () => {
-	const wsQuery = {
-		name: 'get-events-ws',
-		text: `select et."eventId", ut."userName", rt."roomName", et."eventDetails" from
-				events et
-				inner join users ut on et."userId" = ut."userId"
-				inner join rooms rt on et."roomId" = rt."roomId"`,
-		rowMode: 'string',
-	};
-	var wsQueryErrMsg = 'Could not fetch events via ws';
-	var resultToBeSentViaWS = {
-		msgType: 'ALL_EVENTS',
-		data: [],
-	};
-	executeQuery(wsQuery, wsQueryErrMsg, (err, wsResult) => {
-		if (err) {
-			resultToBeSentViaWS.data = result;
-		} else {
-			resultToBeSentViaWS.data = wsResult;
-		}
-		wss.clients.forEach((client) => {
-			if (client.readyState === WebSocket.OPEN) {
-				client.send(JSON.stringify(resultToBeSentViaWS));
-			}
-		});
-	});
-};
 
 exports.getEvents = (req, res) => {
 	const query = {
