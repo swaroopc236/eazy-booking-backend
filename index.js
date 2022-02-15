@@ -26,7 +26,7 @@ app.use('/users', usersRouter);
 app.use('/rooms', roomsRouter);
 app.use('/events', eventsRouter);
 
-app.listen(port, () => {
+var server = app.listen(port, () => {
 	console.log('Server is running on port: ' + port);
 });
 
@@ -60,9 +60,9 @@ app.listen(port, () => {
 // 	});
 // });
 
-const { Server } = require('socket.io');
+const socket = require('socket.io');
 
-const io = new Server(5002);
+const io = socket(server);
 
 io.on('connection', (client) => {
 	console.log('connected');
