@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-const { wss, io } = require('./ws');
+const io = require('./ws');
 const { WebSocket } = require('ws');
 
 const pool = new Pool({
@@ -53,11 +53,11 @@ function getLatestEvents() {
 		} else {
 			resultToBeSentViaWS.data = wsResult;
 		}
-		wss.clients.forEach((client) => {
-			if (client.readyState === WebSocket.OPEN) {
-				client.send(JSON.stringify(resultToBeSentViaWS));
-			}
-		});
+		// wss.clients.forEach((client) => {
+		// 	if (client.readyState === WebSocket.OPEN) {
+		// 		client.send(JSON.stringify(resultToBeSentViaWS));
+		// 	}
+		// });
 
 		io.sockets.emit('LATEST_EVENTS', resultToBeSentViaWS);
 	});
@@ -80,11 +80,11 @@ function getLatestRooms() {
 		} else {
 			resultToBeSentViaWS.data = wsResult;
 		}
-		wss.clients.forEach((client) => {
-			if (client.readyState === WebSocket.OPEN) {
-				client.send(JSON.stringify(resultToBeSentViaWS));
-			}
-		});
+		// wss.clients.forEach((client) => {
+		// 	if (client.readyState === WebSocket.OPEN) {
+		// 		client.send(JSON.stringify(resultToBeSentViaWS));
+		// 	}
+		// });
 
 		io.sockets.emit('LATEST_ROOMS', resultToBeSentViaWS);
 	});
