@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-const wss = require('./ws');
+const { wss, io } = require('./ws');
 const { WebSocket } = require('ws');
 
 const pool = new Pool({
@@ -58,6 +58,8 @@ function getLatestEvents() {
 				client.send(JSON.stringify(resultToBeSentViaWS));
 			}
 		});
+
+		io.sockets.emit('LATEST_EVENTS', resultToBeSentViaWS);
 	});
 }
 
@@ -83,6 +85,8 @@ function getLatestRooms() {
 				client.send(JSON.stringify(resultToBeSentViaWS));
 			}
 		});
+
+		io.sockets.emit('LATEST_ROOMS', resultToBeSentViaWS);
 	});
 }
 

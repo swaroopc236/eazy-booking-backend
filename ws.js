@@ -1,13 +1,8 @@
 const WebSocket = require('ws');
+const server = require('./index');
 
 const wsPort = process.env.WS_PORT || 5001;
 const wss = new WebSocket.Server({ port: wsPort });
-
-// console.log(wss);
-
-wss.on('listening', (ws) => {
-	console.log('Listening on port ' + process.env.WS_PORT);
-});
 
 wss.on('connection', (ws) => {
 	console.log('Client connected');
@@ -22,4 +17,20 @@ wss.on('connection', (ws) => {
 	});
 });
 
-module.exports = wss;
+const socket = require('socket.io');
+
+const io = socket(server, {
+	cors: {
+		origin: '*',
+	},
+});
+
+io.on('connection', (client) => {
+	console.log('connected');
+	client.emit('NEW_CONNECTION', 'Hello from server');
+});
+
+module.exports = {
+	wss,
+	io,
+};
