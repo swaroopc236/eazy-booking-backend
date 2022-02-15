@@ -69,8 +69,9 @@ const io = socket(server, {
 });
 
 io.on('connection', (client) => {
-	console.log('connected');
+	console.log('Connected ', client.id);
 	client.emit('NEW_CONNECTION', 'Hello from server');
+	io.sockets.emit('BROADCAST', 'This is a broadcast message');
 });
 
 module.exports = {
