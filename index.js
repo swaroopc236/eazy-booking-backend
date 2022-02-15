@@ -30,34 +30,43 @@ app.listen(port, () => {
 	console.log('Server is running on port: ' + port);
 });
 
-const WebSocket = require('ws');
-const { OPEN } = require('ws');
+// const WebSocket = require('ws');
+// const { OPEN } = require('ws');
 
-const wss = new WebSocket.Server({
-	server: app,
-	host: 'eazy-booking-staging.herokuapp.com/',
-});
+// const wss = new WebSocket.Server({
+// 	server: app,
+// 	host: 'eazy-booking-staging.herokuapp.com/',
+// });
 
-console.log('*******');
-console.log(wss);
+// console.log('*******');
+// console.log(wss);
 
-app.on('upgrade', (request, socket, head) => {
-	wss.handleUpgrade(request, socket, head, (websocket) => {
-		wss.emit('connection', websocket, request);
-	});
-});
+// app.on('upgrade', (request, socket, head) => {
+// 	wss.handleUpgrade(request, socket, head, (websocket) => {
+// 		wss.emit('connection', websocket, request);
+// 	});
+// });
 
-wss.on('connection', (ws) => {
-	console.log('Client connected....');
-	ws.send('Welcome Client!');
-	const welcomeMsg = {
-		msgType: 'WELCOME',
-		data: ['Welcome Client!'],
-	};
-	ws.send(JSON.stringify(welcomeMsg));
-	ws.on('close', (ws) => {
-		console.log('Client disconnected');
-	});
+// wss.on('connection', (ws) => {
+// 	console.log('Client connected....');
+// 	ws.send('Welcome Client!');
+// 	const welcomeMsg = {
+// 		msgType: 'WELCOME',
+// 		data: ['Welcome Client!'],
+// 	};
+// 	ws.send(JSON.stringify(welcomeMsg));
+// 	ws.on('close', (ws) => {
+// 		console.log('Client disconnected');
+// 	});
+// });
+
+const { Server } = require('socket.io');
+
+const io = new Server(5002);
+
+io.on('connection', (client) => {
+	console.log('connected');
+	client.emit('NEW_CONNECTION', 'Hello from server');
 });
 
 module.exports = wss;
