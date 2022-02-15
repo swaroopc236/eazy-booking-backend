@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-const io = require('./ws');
+const { io } = require('./index');
 const { WebSocket } = require('ws');
 
 const pool = new Pool({
