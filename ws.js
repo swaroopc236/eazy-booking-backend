@@ -1,7 +1,5 @@
-const WebSocket = require('ws');
-const server = require('./index');
-
 const socket = require('socket.io');
+const server = require('./index');
 
 const io = socket(server, {
 	cors: {
@@ -10,29 +8,9 @@ const io = socket(server, {
 });
 
 io.on('connection', (client) => {
-	console.log('connected');
+	console.log('connected ', client.id);
 	client.emit('NEW_CONNECTION', 'Hello from server');
+	io.sockets.emit('BROADCAST', 'This is a broadcast message');
 });
-
-// const wsPort = process.env.WS_PORT || 5001;
-// const wss = new WebSocket.Server({ port: wsPort });
-
-// wss.on('connection', (ws) => {
-// 	console.log('Client connected');
-// 	const welcomeMsg = {
-// 		msgType: 'WELCOME',
-// 		data: ['Welcome Client!'],
-// 	};
-// 	ws.send(JSON.stringify(welcomeMsg));
-
-// 	ws.on('close', (ws) => {
-// 		console.log('Client disconnected');
-// 	});
-// });
-
-// module.exports = {
-// 	wss: wss,
-// 	io: io,
-// };
 
 module.exports = io;
