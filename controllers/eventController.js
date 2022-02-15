@@ -1,9 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
 const { executeQuery, getLatestEvents } = require('../db');
-// const wss = require('../ws');
-const wss = require('../index');
-const { WebSocket } = require('ws');
-// const requireAuth = require('../middleware/authMiddleware');
 
 exports.getEvents = (req, res) => {
 	const query = {
