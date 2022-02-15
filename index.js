@@ -60,17 +60,20 @@ var server = app.listen(port, () => {
 // 	});
 // });
 
-// const socket = require('socket.io');
+const socket = require('socket.io');
 
-// const io = socket(server, {
-// 	cors: {
-// 		origin: '*',
-// 	},
-// });
+const io = socket(server, {
+	cors: {
+		origin: '*',
+	},
+});
 
-// io.on('connection', (client) => {
-// 	console.log('connected');
-// 	client.emit('NEW_CONNECTION', 'Hello from server');
-// });
+io.on('connection', (client) => {
+	console.log('connected');
+	client.emit('NEW_CONNECTION', 'Hello from server');
+});
 
-module.exports = server;
+module.exports = {
+	server: server,
+	io: io,
+};
