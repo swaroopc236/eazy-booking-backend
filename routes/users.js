@@ -4,6 +4,8 @@ const { requireAuth, requireAdmin } = require('../middleware/authMiddleware');
 
 router.get('/', userController.getUsers);
 
+router.get('/:userId', userController.getUserById);
+
 router.post('/signup', userController.signupUser);
 
 router.post('/login', userController.loginUser);

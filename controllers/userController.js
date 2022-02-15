@@ -31,6 +31,28 @@ exports.getUsers = (req, res) => {
 	});
 };
 
+exports.getUserById = (req, res) => {
+	const userId = req.params.userId;
+	const query = {
+		name: 'get-users',
+		text: 'SELECT * FROM USERS where "userId" = $1',
+		values: [userId],
+		rowMode: 'string',
+	};
+	const queryErrMsg = 'Could not get the user';
+
+	executeQuery(query, queryErrMsg, (err, result) => {
+		if (err) {
+			return res.status(500).json({
+				msg: err,
+			});
+		}
+		return res.status(200).json({
+			data: result,
+		});
+	});
+};
+
 exports.signupUser = async (req, res) => {
 	const userName = req.body.userName;
 	const emailId = req.body.emailId;
