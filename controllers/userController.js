@@ -84,7 +84,7 @@ exports.signupUser = async (req, res) => {
 			isAdmin: result[0].isAdmin,
 		};
 		const token = createToken(userPayload);
-		res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+		res.cookie('jwt', token, { httpOnly: true, sameSite: 'none', secure: true, maxAge: maxAge * 1000 });
 		return res.status(201).json({
 			data: result,
 		});
