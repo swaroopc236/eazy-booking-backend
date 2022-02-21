@@ -4,7 +4,7 @@ const { executeQuery, getLatestEvents } = require('../db');
 exports.getEvents = (req, res) => {
 	const query = {
 		name: 'get-events',
-		text: `select et."eventId", ut."userName", rt."roomName", et."eventDetails" from
+		text: `select et."eventId", ut."userName", ut."userId", rt."roomName", rt."roomId", et."eventDetails" from
                 events et
                 inner join users ut on et."userId" = ut."userId"
                 inner join rooms rt on et."roomId" = rt."roomId"`,
