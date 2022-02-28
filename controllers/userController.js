@@ -152,7 +152,7 @@ exports.updateUser = (req, res) => {
 	};
 	var queryErrMsg = 'Could not get the user';
 
-	executeQuery(queryById, queryErrMsg, (err, result) => {
+	executeQuery(queryById, queryErrMsg, async (err, result) => {
 		if (err) {
 			return res.status(500).json({
 				msg: err,
