@@ -173,10 +173,13 @@ exports.updateUser = (req, res) => {
 			});
 		}
 
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(password, salt);
+
 		const query = {
 			name: 'update-user',
-			text: 'UPDATE USERS SET "userName" = $1, "emailId" = $2 WHERE "userId" = $3 RETURNING *',
-			values: [userName, emailId, userId],
+			text: 'UPDATE USERS SET "userName" = $1, "emailId" = $2, "hashedPassword" = $3 WHERE "userId" = $4 RETURNING *',
+			values: [userName, emailId, hashedPassword, userId],
 			rowMode: 'string',
 		};
 		queryErrMsg = 'Could not update user';
