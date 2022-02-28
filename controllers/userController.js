@@ -141,37 +141,100 @@ exports.updateUser = (req, res) => {
 	const userId = req.params.userId;
 	const userName = req.body.userName;
 	const emailId = req.body.emailId;
+	const oldPassword = req.body.oldPassword;
+	const password = req.body.password;
 
-	const query = {
-		name: 'update-user',
-		text: 'UPDATE USERS SET "userName" = $1, "emailId" = $2 WHERE "userId" = $3 RETURNING *',
-		values: [userName, emailId, userId],
+	const queryById = {
+		name: 'get-user-by-id',
+		text: 'SELECT * FROM USERS where "userId" = $1',
+		values: [userId],
 		rowMode: 'string',
 	};
-	var queryErrMsg = 'Could not update user';
+	var queryErrMsg = 'Could not get the user';
 
-	executeQuery(query, queryErrMsg, (err, result) => {
+	executeQuery(queryById, queryErrMsg, (err, result) => {
 		if (err) {
-			if (err.code == '23505') {
-				queryErrMsg = 'Email is already registered';
-			}
 			return res.status(500).json({
-				msg: queryErrMsg,
+				msg: err,
 			});
 		}
-		console.log('*********** Update **********');
-		console.log(result);
-		const userPayload = {
-			id: result[0].userId,
-			userName: result[0].userName,
-			isAdmin: result[0].isAdmin,
+		if (result.length == 0) {
+			return res.status(500).json({
+				msg: err,
+			});
+		}
+		const validOldPassword = await bcrypt.compare(
+			oldPassword,
+			result[0].hashedPassword
+		);
+		if (!validOldPassword) {
+			return res.status(401).json({
+				msg: 'Old password is incorrect',
+			});
+		}
+
+		const query = {
+			name: 'update-user',
+			text: 'UPDATE USERS SET "userName" = $1, "emailId" = $2 WHERE "userId" = $3 RETURNING *',
+			values: [userName, emailId, userId],
+			rowMode: 'string',
 		};
-		const token = createToken(userPayload);
-		res.cookie('jwt', token, { httpOnly: true, sameSite: 'none', secure: true, maxAge: maxAge * 1000 });
-		return res.status(200).json({
-			data: result,
+		queryErrMsg = 'Could not update user';
+	
+		executeQuery(query, queryErrMsg, (err, result) => {
+			if (err) {
+				if (err.code == '23505') {
+					queryErrMsg = 'Email is already registered';
+				}
+				return res.status(500).json({
+					msg: queryErrMsg,
+				});
+			}
+			console.log('*********** Update **********');
+			console.log(result);
+			const userPayload = {
+				id: result[0].userId,
+				userName: result[0].userName,
+				isAdmin: result[0].isAdmin,
+			};
+			const token = createToken(userPayload);
+			res.cookie('jwt', token, { httpOnly: true, sameSite: 'none', secure: true, maxAge: maxAge * 1000 });
+			return res.status(200).json({
+				data: result,
+			});
 		});
 	});
+
+	// const query = {
+	// 	name: 'update-user',
+	// 	text: 'UPDATE USERS SET "userName" = $1, "emailId" = $2 WHERE "userId" = $3 RETURNING *',
+	// 	values: [userName, emailId, userId],
+	// 	rowMode: 'string',
+	// };
+	// var queryErrMsg = 'Could not update user';
+
+	// executeQuery(query, queryErrMsg, (err, result) => {
+	// 	if (err) {
+	// 		if (err.code == '23505') {
+	// 			queryErrMsg = 'Email is already registered';
+	// 		}
+	// 		return res.status(500).json({
+	// 			msg: queryErrMsg,
+	// 		});
+	// 	}
+	// 	console.log('*********** Update **********');
+	// 	console.log(result);
+	// 	const userPayload = {
+	// 		id: result[0].userId,
+	// 		userName: result[0].userName,
+	// 		isAdmin: result[0].isAdmin,
+	// 	};
+	// 	const token = createToken(userPayload);
+	// 	res.cookie('jwt', token, { httpOnly: true, sameSite: 'none', secure: true, maxAge: maxAge * 1000 });
+	// 	return res.status(200).json({
+	// 		data: result,
+	// 	});
+	// });
 };
 
 exports.deleteUser = (req, res) => {
