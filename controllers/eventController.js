@@ -51,6 +51,33 @@ exports.getEventById = (req, res) => {
 	});
 };
 
+exports.getEventsInRoom = (req, res) => {
+	const roomId = req.params.roomId;
+
+	const query = {
+		name: 'get-events-by-roomid',
+		text: `select et."eventId", ut."userName", rt."roomName", et."eventDetails" from
+                events et
+                inner join users ut on et."userId" = ut."userId"
+                inner join rooms rt on et."roomId" = rt."roomId"
+				where et."roomId" = $1`,
+		values: [roomId],
+		rowMode: 'string',
+	};
+	const queryErrMsg = 'Could not get the events';
+
+	executeQuery(query, queryErrMsg, (err, result) => {
+		if (err) {
+			return res.status(500).json({
+				msg: err,
+			});
+		}
+		return res.status(200).json({
+			data: result,
+		});
+	});
+};
+
 exports.addEvent = (req, res) => {
 	const userId = req.body.userId;
 	const roomId = req.body.roomId;

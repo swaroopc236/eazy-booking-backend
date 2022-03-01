@@ -4,6 +4,8 @@ const { requireAuth } = require('../middleware/authMiddleware');
 
 router.get('/', eventController.getEvents);
 
+router.get('/room/:roomId', eventController.getEventsInRoom);
+
 router.get('/:eventId', eventController.getEventById);
 
 router.post('/', requireAuth, eventController.addEvent);
