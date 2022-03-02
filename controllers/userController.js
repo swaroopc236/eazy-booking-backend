@@ -265,7 +265,7 @@ exports.deleteUser = (req, res) => {
 };
 
 exports.logoutUser = (req, res) => {
-	res.cookie('jwt', '', { maxAge: 1 });
+	res.cookie('jwt', '', { httpOnly: true, sameSite: 'none', secure: true, maxAge: maxAge * 1000 });
 	return res.status(200).json({
 		msg: 'Logged out',
 	});
