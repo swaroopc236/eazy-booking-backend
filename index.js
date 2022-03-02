@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 var corsOptions = {
-	origin: 'http://localhost:4200',
+	origin: 'https://eazy-booking-app.herokuapp.com/',
 	credentials: true
 }
 
