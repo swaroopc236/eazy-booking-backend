@@ -6,12 +6,23 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-var corsOptions = {
-	origin: 'https://eazy-booking-app.herokuapp.com',
-	credentials: true
+var allowlist = ['https://eazy-booking-app.herokuapp.com/', 'http://localhost:4200']
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (allowlist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true, credentials: true } // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false } // disable CORS for this request
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
 }
 
-app.use(cors(corsOptions));
+// var corsOptions = {
+// 	origin: 'https://eazy-booking-app.herokuapp.com',
+// 	credentials: true
+// }
+
+app.use(cors(corsOptionsDelegate));
 app.use(express.json());
 app.use(cookieParser());
 
