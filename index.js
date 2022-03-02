@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-var allowlist = ['https://eazy-booking-app.herokuapp.com', 'http://localhost:4200']
+var allowlist = ['https://eazy-booking-app.herokuapp.com', 'http://localhost:4200', 'http://192.168.0.102:4200']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
