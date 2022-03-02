@@ -34,10 +34,10 @@ function executeQuery(query, queryErrMsg, queryResult) {
 function getLatestEvents() {
 	const wsQuery = {
 		name: 'get-events-ws',
-		text: `select et."eventId", ut."userName", rt."roomName", et."eventDetails" from
-				events et
-				inner join users ut on et."userId" = ut."userId"
-				inner join rooms rt on et."roomId" = rt."roomId"`,
+		text: `select et."eventId", ut."userName", ut."userId", rt."roomName", rt."roomId", et."eventDetails" from
+                events et
+                inner join users ut on et."userId" = ut."userId"
+                inner join rooms rt on et."roomId" = rt."roomId"`,
 		rowMode: 'string',
 	};
 	var wsQueryErrMsg = 'Could not fetch events via ws';
